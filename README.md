@@ -1,5 +1,7 @@
 # Detection-as-Code Pipeline
 
+   ![Detection CI](https://github.com/jakkulasanoj97-sys/detection-as-code/actions/workflows/detection-ci.yml/badge.svg)
+
 Detections treated like software: every rule has a single source of truth, automated
 tests, portable generated output, and a CI gate that blocks bad detections from merging.
 
