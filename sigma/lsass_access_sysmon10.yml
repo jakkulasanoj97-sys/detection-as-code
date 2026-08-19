@@ -1,0 +1,44 @@
+title: LSASS Credential Dumping - Suspicious Process Access
+id: a30b41c2-6f70-4182-cd3e-60718293a405
+status: experimental
+description: >
+  Detects suspicious access to the LSASS process memory (Sysmon Event ID 10) with access
+  masks commonly used to read process memory for credential extraction (e.g. Mimikatz
+  sekurlsa::logonpasswords). Filters known-good accessors; remaining high-privilege reads
+  of lsass.exe are strong indicators of credential dumping.
+references:
+  - https://attack.mitre.org/techniques/T1003/001/
+  - https://github.com/sbousseaden/EVTX-ATTACK-SAMPLES
+author: Sanoj J
+date: 2026/08/19
+tags:
+  - attack.credential_access
+  - attack.t1003.001
+logsource:
+  product: windows
+  category: process_access
+detection:
+  selection:
+    TargetImage|endswith: '\lsass.exe'
+    GrantedAccess:
+      - '0x1010'
+      - '0x1410'
+      - '0x1438'
+      - '0x143a'
+      - '0x1fffff'
+  filter_known:
+    SourceImage|endswith:
+      - '\wininit.exe'
+      - '\csrss.exe'
+      - '\services.exe'
+      - '\MsMpEng.exe'
+      - '\Microsoft.Identity.AadConnect.Health.AadSync.Host.exe'
+  condition: selection and not filter_known
+falsepositives:
+  - Endpoint protection / EDR agents legitimately reading LSASS
+  - Backup or memory-diagnostic tooling
+level: high
+fields:
+  - SourceImage
+  - GrantedAccess
+  - SourceProcessId

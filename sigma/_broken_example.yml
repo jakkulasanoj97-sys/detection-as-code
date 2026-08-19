@@ -1,0 +1,14 @@
+title: Broken Rule Example (intentional - demonstrates CI gate)
+id: 00000000-0000-0000-0000-000000000000
+status: experimental
+description: >
+  This rule is intentionally malformed to demonstrate that the CI pipeline blocks
+  detections that fail validation. It is excluded from the shipped ruleset via the
+  filename prefix and only loaded by the 'broken rule' demo test.
+logsource:
+  product: windows
+  service: security
+detection:
+  selection:
+    EventID: 4769
+  # NOTE: no 'condition' key, and no attack.* tag -> invalid

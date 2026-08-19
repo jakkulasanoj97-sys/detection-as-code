@@ -1,0 +1,8 @@
+// Kerberoasting - RC4 Service Ticket Request
+SecurityEvent
+| where EventID == "4769"
+| where TicketEncryptionType == "0x17"
+| where TicketOptions == "0x40810000"
+| where not(ServiceName endswith "$")
+| where not(ServiceName == "krbtgt")
+| where not(Status == "0x1B")

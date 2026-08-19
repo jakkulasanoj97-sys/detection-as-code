@@ -1,0 +1,40 @@
+title: Kerberoasting - RC4 Service Ticket Request
+id: 8a9d7c11-1a2b-4c3d-9e4f-1b2c3d4e5f60
+status: experimental
+description: >
+  Detects potential Kerberoasting by flagging Kerberos service ticket (TGS) requests
+  that use RC4-HMAC encryption (0x17). Attackers request TGS tickets for accounts with
+  Service Principal Names (SPNs) and downgrade to RC4 so the ticket can be cracked offline
+  to recover the service account password.
+references:
+  - https://attack.mitre.org/techniques/T1558/003/
+  - https://github.com/sbousseaden/EVTX-ATTACK-SAMPLES
+author: Sanoj J
+date: 2026/08/19
+tags:
+  - attack.credential_access
+  - attack.t1558.003
+logsource:
+  product: windows
+  service: security
+detection:
+  selection:
+    EventID: 4769
+    TicketEncryptionType: '0x17'
+    TicketOptions: '0x40810000'
+  filter_machine:
+    ServiceName|endswith: '$'
+  filter_krbtgt:
+    ServiceName: 'krbtgt'
+  filter_failure:
+    Status: '0x1B'
+  condition: selection and not 1 of filter_*
+falsepositives:
+  - Legacy applications or hosts that genuinely negotiate RC4 for Kerberos
+  - Service accounts on down-level operating systems
+level: high
+fields:
+  - ServiceName
+  - TargetUserName
+  - IpAddress
+  - TicketEncryptionType

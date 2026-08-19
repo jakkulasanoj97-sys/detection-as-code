@@ -1,0 +1,2 @@
+`comment("Kerberoasting - RC4 Service Ticket Request")`
+index=* source="WinEventLog:Security" EventID="4769" TicketEncryptionType="0x17" TicketOptions="0x40810000" NOT ServiceName="*$" NOT ServiceName="krbtgt" NOT Status="0x1B"

@@ -1,0 +1,39 @@
+title: DCSync - Directory Replication Rights Abuse
+id: 5e6f7081-3c4d-4e5f-9a0b-3d4e5f607182
+status: experimental
+description: >
+  Detects a DCSync attack by flagging directory service access (Event ID 4662) that
+  requests the replication control access rights DS-Replication-Get-Changes and
+  DS-Replication-Get-Changes-All from an account that is not a domain controller.
+  Legitimate replication of secrets is performed by DCs; a non-DC principal requesting
+  these rights indicates credential theft via replication (e.g. Mimikatz lsadump::dcsync).
+references:
+  - https://attack.mitre.org/techniques/T1003/006/
+  - https://github.com/sbousseaden/EVTX-ATTACK-SAMPLES
+author: Sanoj J
+date: 2026/08/19
+tags:
+  - attack.credential_access
+  - attack.t1003.006
+logsource:
+  product: windows
+  service: security
+detection:
+  selection:
+    EventID: 4662
+    Properties|contains:
+      - '1131f6aa-9c07-11d1-f79f-00c04fc2dcd2'  # DS-Replication-Get-Changes
+      - '1131f6ad-9c07-11d1-f79f-00c04fc2dcd2'  # DS-Replication-Get-Changes-All
+  filter_machine:
+    SubjectUserName|endswith: '$'
+  filter_msol:
+    SubjectUserName|startswith: 'MSOL_'
+  condition: selection and not 1 of filter_*
+falsepositives:
+  - Azure AD Connect / Entra Connect sync accounts (typically MSOL_*) performing replication
+  - Backup or identity-governance tooling granted replication rights
+level: critical
+fields:
+  - SubjectUserName
+  - ObjectName
+  - Properties

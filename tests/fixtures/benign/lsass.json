@@ -1,0 +1,2 @@
+{"EventID":"10","TargetImage":"C:\\Windows\\System32\\lsass.exe","GrantedAccess":"0x1010","SourceImage":"C:\\Windows\\System32\\wininit.exe"}
+{"EventID":"10","TargetImage":"C:\\Windows\\System32\\lsass.exe","GrantedAccess":"0x1000","SourceImage":"C:\\Program Files\\Windows Defender\\MsMpEng.exe"}

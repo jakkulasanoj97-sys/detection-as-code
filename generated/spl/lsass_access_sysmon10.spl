@@ -1,0 +1,2 @@
+`comment("LSASS Credential Dumping - Suspicious Process Access")`
+index=* source="WinEventLog:Security" TargetImage="*\lsass.exe" (GrantedAccess="0x1010" OR GrantedAccess="0x1410" OR GrantedAccess="0x1438" OR GrantedAccess="0x143a" OR GrantedAccess="0x1fffff") NOT (SourceImage="*\wininit.exe" OR SourceImage="*\csrss.exe" OR SourceImage="*\services.exe" OR SourceImage="*\MsMpEng.exe" OR SourceImage="*\Microsoft.Identity.AadConnect.Health.AadSync.Host.exe")

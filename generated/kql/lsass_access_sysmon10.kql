@@ -1,0 +1,5 @@
+// LSASS Credential Dumping - Suspicious Process Access
+SecurityEvent
+| where TargetImage endswith "\lsass.exe"
+| where (GrantedAccess == "0x1010" or GrantedAccess == "0x1410" or GrantedAccess == "0x1438" or GrantedAccess == "0x143a" or GrantedAccess == "0x1fffff")
+| where not((SourceImage endswith "\wininit.exe" or SourceImage endswith "\csrss.exe" or SourceImage endswith "\services.exe" or SourceImage endswith "\MsMpEng.exe" or SourceImage endswith "\Microsoft.Identity.AadConnect.Health.AadSync.Host.exe"))

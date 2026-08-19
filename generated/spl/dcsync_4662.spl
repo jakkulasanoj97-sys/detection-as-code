@@ -1,0 +1,2 @@
+`comment("DCSync - Directory Replication Rights Abuse")`
+index=* source="WinEventLog:Security" EventID="4662" (Properties="*1131f6aa-9c07-11d1-f79f-00c04fc2dcd2*" OR Properties="*1131f6ad-9c07-11d1-f79f-00c04fc2dcd2*") NOT SubjectUserName="*$" NOT SubjectUserName="MSOL_*"
